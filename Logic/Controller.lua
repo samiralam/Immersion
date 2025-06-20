@@ -168,13 +168,7 @@ local ControllerInput = { -- return true when propagating
 			end
 		end
 	end;
-	[KEY.CIRCLE] = function(self)
-		if self.isInspecting then
-			self.Inspector:Hide()
-		elseif self.hasItems then
-			self:ShowItems()
-		end
-	end;
+	[KEY.CIRCLE] = function(self) API:CloseGossip() API:CloseQuest() end;
 	[KEY.CROSS] = function(self)
 		-- Gossip/multiple quest choices
 		if self.TitleButtons:GetMaxIndex() > 0 then
@@ -199,7 +193,13 @@ local ControllerInput = { -- return true when propagating
 			CompleteQuest()
 		end
 	end;
-	[KEY.TRIANGLE] = function(self) API:CloseGossip() API:CloseQuest() end;
+	[KEY.TRIANGLE] = function(self)
+		if self.isInspecting then
+			self.Inspector:Hide()
+		elseif self.hasItems then
+			self:ShowItems()
+		end
+	end;
 	[KEY.OPTIONS] = function(self) API:CloseGossip() API:CloseQuest() end;
 	[KEY.CENTER] = function(self) API:CloseGossip() API:CloseQuest() end;
 	[KEY.SHARE] = function(self) API:CloseGossip() API:CloseQuest() end;
@@ -351,10 +351,11 @@ Inspector:HookScript('OnShow', function(self)
 	self.CROSS = select(2, parent:GetHintForKey('CROSS'))
 	self.CIRCLE = select(2, parent:GetHintForKey('CIRCLE'))
 	self.SQUARE = select(2, parent:GetHintForKey('SQUARE'))
+	self.TRIANGLE = select(2, parent:GetHintForKey('TRIANGLE'))
 
 	parent.isInspecting = true
 	parent:RemoveHint('SQUARE')
-	parent:AddHint('CIRCLE', CLOSE)
+	parent:AddHint('TRIANGLE', CLOSE)
 	if ( parent.lastEvent == 'QUEST_PROGRESS' ) then
 		parent:RemoveHint('CROSS')
 	else
@@ -377,9 +378,13 @@ Inspector:HookScript('OnHide', function(self)
 	if self.CIRCLE then
 		parent:AddHint('CIRCLE', self.CIRCLE)
 	end
+	if self.TRIANGLE then
+		parent:AddHint('TRIANGLE', self.TRIANGLE)
+	end
 	self.CROSS = nil
 	self.SQUARE = nil
 	self.CIRCLE = nil
+	self.TRIANGLE = nil
 end)
 
 function Inspector:ShowFocusedTooltip(showTooltip)

@@ -338,9 +338,9 @@ function Frame:UpdateItems()
 	self.hasItems = #items > 0
 
 	if self.hasItems then
-		self:AddHint('CIRCLE', INSPECT)
+		self:AddHint('TRIANGLE', INSPECT)
 	else
-		self:RemoveHint('CIRCLE')
+		self:RemoveHint('TRIANGLE')
 	end
 
 	return items, #items
@@ -358,7 +358,7 @@ function Frame:PlayIntro(event, freeFloating)
 		self:ClearImmersionFocus()
 	else
 		self:SetImmersionFocus()
-		self:AddHint('TRIANGLE', GOODBYE)
+		self:AddHint('CIRCLE', GOODBYE)
 	end
 
 	self:Show()
